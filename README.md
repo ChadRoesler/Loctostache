@@ -2,6 +2,12 @@
 
 A simple octostache for linux tool.
 
+Example Usage:
+loctostache -d "{\"doing\":\"testing var replacement\"}" -t "We are #{doing}"
+Outputs: 
+We are testing var replacement
+
+
 
 Loctostache 1.2210.1401.5526
 Copyright (C) 2022 Chad Roesler
