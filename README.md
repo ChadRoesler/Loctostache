@@ -12,11 +12,11 @@ We are testing var replacement
 Loctostache 1.2210.1401.5526
 Copyright (C) 2022 Chad Roesler
 
-  -d, --dictionary    Required. The dictionary of to consume, as a json string object
+  -d, --dictionary    Required. A json string dictionary of keys and their values
 
-  -t, --text          Required. The text to replace
+  -t, --text          Required. Text to search and replace against
 
-  -f, --files         Required. The path of a file to Repalce
+  -f, --files         Required. A comma separated list of files read and replace text in
 
   --help              Display this help screen.
 
