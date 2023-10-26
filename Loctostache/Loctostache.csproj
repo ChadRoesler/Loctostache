@@ -13,6 +13,7 @@
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</Version>
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <PackageProjectUrl>https://github.com/ChadRoesler/Loctostache</PackageProjectUrl>
+    <AnalysisLevel>6.0-recommended</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Octostache" Version="3.2.1" />
+    <PackageReference Include="Octostache" Version="3.7.0" />
   </ItemGroup>
 
 </Project>

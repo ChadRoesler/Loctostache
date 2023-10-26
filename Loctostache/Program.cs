@@ -1,8 +1,10 @@
-﻿using CommandLine;
+﻿// Ignore Spelling: Loctostache
+
+using CommandLine;
 using Loctostache.Commands;
+using Loctostache.Helpers;
 using Newtonsoft.Json;
 using Octostache;
-using System.Text;
 
 namespace Loctostache
 {
@@ -14,15 +16,47 @@ namespace Loctostache
             {
                 try
                 {
-                    var varDict = new VariableDictionary();
-                    var deptObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(opts.Variables);
-                    foreach (var key in deptObj.Keys)
+                    VariableDictionary varDict = new();
+                    string? varString = string.Empty;
+                    Dictionary<string, string> dict = new();
+
+                    if (opts.VariableFile != null)
                     {
-                        varDict.Add(key, deptObj.GetValueOrDefault(key));
+                        if (File.Exists(opts.VariableFile))
+                        {
+                            varString = File.ReadAllText(opts.VariableFile);
+                        }
+                        else
+                        {
+                            Console.Error.WriteLine($"[ERROR] Failed to locate file at: {opts.VariableFile}");
+                        }
+                    }
+                    else
+                    {
+                        varString = opts.Variables;
+                    }
+                    if (opts.JsonQueries != null && opts.JsonQueries.Any())
+                    {
+                        dict = JsonQueryHelper.QueriesObjectToDict(varString, opts.JsonQueries);
+                    }
+                    else
+                    {
+                        dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(varString);
+                    }
+                    foreach (var key in dict.Keys)
+                    {
+                        varDict.Add(key, dict.GetValueOrDefault(key));
                     }
                     if (!string.IsNullOrWhiteSpace(opts.Text))
                     {
-                        Console.WriteLine(varDict.Evaluate(opts.Text));
+                        if (opts.NoNewline)
+                        {
+                            Console.Write(varDict.Evaluate(opts.Text));
+                        }
+                        else
+                        {
+                            Console.WriteLine(varDict.Evaluate(opts.Text));
+                        }
                     }
                     if (opts.Files != null && opts.Files.Any())
                     {
@@ -31,35 +65,8 @@ namespace Loctostache
                             Console.WriteLine(file);
                             if (File.Exists(file))
                             {
-                                var fileEncoding = Encoding.ASCII;
                                 var bom = File.ReadAllBytes(file).Take(4).ToArray();
-                                if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
-                                {
-#pragma warning disable SYSLIB0001 // Type or member is obsolete
-                                    fileEncoding = Encoding.UTF7;
-#pragma warning restore SYSLIB0001 // Type or member is obsolete
-                                }
-                                if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
-                                {
-                                    fileEncoding = Encoding.UTF8;
-                                }
-
-                                if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0)
-                                {
-                                    fileEncoding = Encoding.UTF32;
-                                }
-                                if (bom[0] == 0xff && bom[1] == 0xfe)
-                                {
-                                    fileEncoding = Encoding.Unicode;
-                                }
-                                if (bom[0] == 0xfe && bom[1] == 0xff)
-                                {
-                                    fileEncoding = Encoding.BigEndianUnicode;
-                                }
-                                if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
-                                {
-                                    fileEncoding = new UTF32Encoding(true, true);
-                                }
+                                var fileEncoding = EncodingHelper.GetEncodingFromBom(bom);
                                 File.WriteAllText(file, varDict.Evaluate(File.ReadAllText(file)), fileEncoding);
                             }
                             else
