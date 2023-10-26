@@ -10,7 +10,7 @@ namespace Loctostache.Commands
         public string? Variables { get; set; }
         [Option('v', "varFile", HelpText = "A json file that contains the diction of keys", SetName = "varfile", Required = true)]
         public string? VariableFile { get; set; }
-        [Option('q', "jsonQueries", HelpText = "a comma separated list of json queries to execute against a dictionary", Separator = ',')]
+        [Option('q', "jsonQueries", HelpText = "A comma separated list of json queries to execute against a dictionary", Separator = ',')]
         public IEnumerable<string>? JsonQueries { get; set; }
         [Option('t', "text", HelpText = "Text to search and replace against", SetName = "text", Required = true)]
         public string? Text { get; set; }
