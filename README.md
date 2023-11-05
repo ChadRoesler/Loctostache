@@ -1,31 +1,59 @@
 # Loctostache
 
-A simple octostache for linux tool.
+A simple octostache for Linux tool.
 
 Example Usage:
-loctostache -d "{\"doing\":\"testing var replacement\"}" -t "We are #{doing}"
+loctostache text -d "{\"doing\":\"testing var replacement\"}" -t "We are #{doing}"
 
 Outputs: 
 We are testing var replacement
 
 
-
-
-
-Loctostache 1.2310.2602.5419
+## Base Help
+Loctostache 1.2311.0316.0
 Copyright (C) 2023 Chad Roesler
 
-  -d, --dictionary     Required. A json string dictionary of keys and their values
+  file       Loctostache processing on files
 
-  -v, --varFile        Required. A json file that contains the diction of keys
+  text       Loctostache processing on text
 
-  -q, --jsonQueries    a comma separated list of json queries to execute against a dictionary
+  help       Display more information on a specific command.
+
+  version    Display version information.
+
+
+## Text Help
+Loctostache 1.2311.0316.0
+Copyright (C) 2023 Chad Roesler
 
   -t, --text           Required. Text to search and replace against
 
+  -n, --no-newline     Prevents appending a new line at the end of the text return
+
+  -d, --dictionary     (Group: variables) A json string dictionary of keys and their values
+
+  -v, --varFile        (Group: variables) A json file that contains the diction of keys
+
+  -q, --jsonQueries    A comma separated list of json queries to execute against a dictionary
+
+  --help               Display this help screen.
+
+  --version            Display version information.
+
+
+## File Help
+Loctostache 1.2311.0316.0
+Copyright (C) 2023 Chad Roesler
+
   -f, --files          Required. A comma separated list of files read and replace text in
 
-  -n, --no-newline     Prevents appending a new line at the end of the text return
+  --verbose            Verbosity when processing files
+
+  -d, --dictionary     (Group: variables) A json string dictionary of keys and their values
+
+  -v, --varFile        (Group: variables) A json file that contains the diction of keys
+
+  -q, --jsonQueries    A comma separated list of json queries to execute against a dictionary
 
   --help               Display this help screen.
 
