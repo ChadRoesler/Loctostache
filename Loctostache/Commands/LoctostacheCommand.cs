@@ -1,19 +1,21 @@
 ﻿// Ignore Spelling: Json Loctostache
 
 using CommandLine;
+using Loctostache.Constants;
 using Loctostache.ExtensionMethods;
 using Loctostache.Helpers;
 using Octostache;
+using System.Globalization;
 
 namespace Loctostache.Commands
 {
     internal class LoctostacheCommand
     {
-        [Option('d', "dictionary", HelpText = "A json string dictionary of keys and their values", Group = "variables", Required = true)]
+        [Option(CommandStrings.DictionaryOption, CommandStrings.DictionaryOptionLong, HelpText = CommandStrings.DictionaryOptionHelp, Group = CommandStrings.VariablesGroupName, Required = true)]
         public string? Variables { get; set; }
-        [Option('v', "varFile", HelpText = "A json file that contains the diction of keys", Group = "variables", Required = true)]
+        [Option(CommandStrings.VarFileOption, CommandStrings.VarFileOptionLong, HelpText = CommandStrings.VarFileOptionHelp, Group = CommandStrings.VariablesGroupName, Required = true)]
         public string? VariableFile { get; set; }
-        [Option('q', "jsonQueries", HelpText = "A comma separated list of json queries to execute against a dictionary", Separator = ',')]
+        [Option(CommandStrings.JsonQueriesOption, CommandStrings.JsonQueriesOptionLong, HelpText = CommandStrings.JsonQueriesOptionHelp, Separator = CommandStrings.StandardSeperator)]
         public IEnumerable<string>? JsonQueries { get; set; }
 
         internal VariableDictionary VarDictProcessing()
@@ -21,34 +23,42 @@ namespace Loctostache.Commands
             VariableDictionary varDict = new();
             Dictionary<string, string> dict = new();
             Dictionary<string, string> stringDict = new();
-            if (VariableFile != null && VariableFile.Any())
+            try
             {
-                if (File.Exists(VariableFile))
+                if (VariableFile != null && VariableFile.Any())
                 {
-                    var fileText = File.ReadAllText(VariableFile);
-                    dict = JsonHelper.GetJsonRootDictionary(fileText);
-                    if (JsonQueries != null && JsonQueries.Any())
+                    if (File.Exists(VariableFile))
                     {
-                        dict.AddOrUpdate(JsonHelper.QueriesObjectToDict(fileText, JsonQueries));
+                        string fileText = File.ReadAllText(VariableFile);
+                        dict = JsonHelper.GetJsonRootDictionary(fileText);
+                        if (JsonQueries != null && JsonQueries.Any())
+                        {
+                            dict.AddOrUpdate(JsonHelper.QueriesObjectToDict(fileText, JsonQueries));
+                        }
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine(string.Format(CultureInfo.CurrentCulture, ErrorStrings.VarFileLocation, VariableFile));
                     }
                 }
-                else
+                if (Variables != null && Variables.Any())
                 {
-                    Console.Error.WriteLine($"[ERROR] Failed to locate file at: {VariableFile}");
+                    stringDict = JsonHelper.GetJsonRootDictionary(Variables);
+                    if (JsonQueries != null && JsonQueries.Any())
+                    {
+                        stringDict.AddOrUpdate(JsonHelper.QueriesObjectToDict(Variables, JsonQueries));
+                    }
+                }
+                dict.AddOrUpdate(stringDict);
+                foreach (string key in dict.Keys)
+                {
+                    varDict.Set(key, dict.GetValueOrDefault(key));
                 }
             }
-            else if (Variables != null && Variables.Any())
+            catch (Exception ex)
             {
-                stringDict = JsonHelper.GetJsonRootDictionary(Variables);
-                if (JsonQueries != null && JsonQueries.Any())
-                {
-                    stringDict.AddOrUpdate(JsonHelper.QueriesObjectToDict(Variables, JsonQueries));
-                }
-            }
-            dict.AddOrUpdate(stringDict);
-            foreach (var key in dict.Keys)
-            {
-                varDict.Set(key, dict.GetValueOrDefault(key));
+                Console.Error.WriteLine(string.Format(CultureInfo.CurrentCulture, ErrorStrings.VarDictionaryProcessing, ex.Message));
+                Environment.Exit(209);
             }
             return varDict;
         }

@@ -1,30 +1,46 @@
 ﻿// Ignore Spelling: Json Loctostache
 
 using CommandLine;
+using Loctostache.Constants;
+using Octostache;
+using System.Globalization;
 
 namespace Loctostache.Commands
 {
-    [Verb("text", HelpText = "Loctostache processing on text")]
+    [Verb(CommandStrings.TextVerb, HelpText = CommandStrings.TextVerbHelp)]
     internal class TextVerb : LoctostacheCommand
     {
-        [Option('t', "text", HelpText = "Text to search and replace against", Required = true)]
+        [Option(CommandStrings.TextOption, CommandStrings.TextOptionLong, HelpText = CommandStrings.TextOptionHelp, Required = true)]
         public string? Text { get; set; }
-        [Option('n', "no-newline", HelpText = "Prevents appending a new line at the end of the text return")]
+        [Option(CommandStrings.NoNewLineOption, CommandStrings.NoNewLineOptionLong, HelpText = CommandStrings.NoNewLineOptionHelp)]
         public bool NoNewline { get; set; } = false;
 
         internal void TextProcessing()
         {
-            var varDict = VarDictProcessing();
-            if (!string.IsNullOrWhiteSpace(Text))
+            VariableDictionary varDict = VarDictProcessing();
+            try
             {
-                if (NoNewline)
+                if (!string.IsNullOrWhiteSpace(Text))
                 {
-                    Console.Write(varDict.Evaluate(Text));
+                    if (NoNewline)
+                    {
+                        Console.Write(varDict.Evaluate(Text));
+                    }
+                    else
+                    {
+                        Console.WriteLine(varDict.Evaluate(Text));
+                    }
                 }
                 else
                 {
-                    Console.WriteLine(varDict.Evaluate(Text));
+                    Console.Error.WriteLine(ErrorStrings.NoText);
+                    Environment.Exit(291);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(string.Format(CultureInfo.CurrentCulture, ErrorStrings.TextProcessing, ex.Message));
+                Environment.Exit(291);
             }
         }
     }

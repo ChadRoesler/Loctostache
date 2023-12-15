@@ -1,42 +1,60 @@
 ﻿// Ignore Spelling: Json Loctostache
 
 using CommandLine;
+using Loctostache.Constants;
 using Loctostache.Helpers;
+using Octostache;
+using System.Globalization;
 
 namespace Loctostache.Commands
 {
-    [Verb("file", HelpText = "Loctostache processing on files")]
+    [Verb(CommandStrings.FileVerb, HelpText = CommandStrings.FileVerbHelp)]
     internal class FileVerb : LoctostacheCommand
     {
-        [Option('f', "files", HelpText = "A comma separated list of files read and replace text in", Separator = ',', Required = true)]
-        public IEnumerable<string> Files { get; set; }
-        [Option("verbose", HelpText = "Verbosity when processing.")]
+        [Option(CommandStrings.FilesOption, CommandStrings.FilesOptionLong, HelpText = CommandStrings.FilesOptionHelp, Separator = CommandStrings.StandardSeperator, Required = true)]
+        public IEnumerable<string> Files { get; set; } = (IEnumerable<string>)Enumerable.Empty<object>();
+        [Option(CommandStrings.StopOnFailureOption, CommandStrings.StopOnFailureOptionLong, HelpText = CommandStrings.StopOnFailureOptionHelp, Default = false)]
+        public bool StopOnFailure { get; set; } = false;
+        [Option(CommandStrings.VerboseOption, HelpText = CommandStrings.VerboseOptionHelp)]
         public bool Verbose { get; set; } = false;
 
         internal void FileProcessing()
         {
-            var varDict = VarDictProcessing();
-            var fileCount = Files.Count();
-            var currentCount = 1;
-            foreach (var file in Files)
+            VariableDictionary varDict = VarDictProcessing();
+            int fileCount = Files.Count();
+            int currentCount = 1;
+            foreach (string file in Files)
             {
                 if (Verbose)
                 {
-                    Console.WriteLine($"Processing file {currentCount}/{fileCount}..........{file}");
+                    Console.WriteLine(string.Format(CultureInfo.CurrentCulture, MessageStrings.FileProcessing, currentCount.ToString(string.Format(CultureInfo.CurrentCulture, ResourceStrings.FileNumberPadding, fileCount.ToString(CultureInfo.CurrentCulture).Length)), fileCount, file));
+
                 }
-                if (File.Exists(file))
+                try
                 {
-                    var bom = File.ReadAllBytes(file).Take(4).ToArray();
-                    var fileEncoding = EncodingHelper.GetEncodingFromBom(bom);
-                    File.WriteAllText(file, varDict.Evaluate(File.ReadAllText(file)), fileEncoding);
+                    if (File.Exists(file))
+                    {
+
+                        byte[] bom = File.ReadAllBytes(file).Take(4).ToArray();
+                        System.Text.Encoding fileEncoding = EncodingHelper.GetEncodingFromBom(bom);
+                        File.WriteAllText(file, varDict.Evaluate(File.ReadAllText(file)), fileEncoding);
+                    }
+                    else
+                    {
+                        throw new FileNotFoundException();
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Console.Error.WriteLine($"[ERROR] Failed to locate file at: {file}");
+                    Console.Error.WriteLine(string.Format(CultureInfo.CurrentCulture, ErrorStrings.FileProcessing, file, ex.Message));
+                    if (StopOnFailure)
+                    {
+                        Environment.Exit(863);
+                    }
                 }
                 currentCount++;
             }
-            Console.WriteLine("Complete!");
+            Console.WriteLine(MessageStrings.CompletedProcessing);
         }
     }
 }

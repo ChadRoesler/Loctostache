@@ -1,9 +1,10 @@
 ﻿// Ignore Spelling: Loctostache
 
+using Loctostache.Constants;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-[assembly: InternalsVisibleTo("LoctostacheTests")]
+[assembly: InternalsVisibleTo(ResourceStrings.TestProjectName)]
 namespace Loctostache.Helpers
 {
     internal static class EncodingHelper
@@ -11,7 +12,7 @@ namespace Loctostache.Helpers
         internal static Encoding GetEncodingFromBom(byte[] bom)
         {
             bom = bom[0..3];
-            var fileEncoding = Encoding.ASCII;
+            Encoding fileEncoding = Encoding.ASCII;
             if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
             {
 #pragma warning disable SYSLIB0001 // Type or member is obsolete

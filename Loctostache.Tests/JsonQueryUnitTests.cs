@@ -10,7 +10,7 @@ namespace LoctostacheTests
         [Fact]
         public void ValidateJSonQuery()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""TestObj1"":{
 		""Var1_1"":""Output1_1"",
 		""Var1_2"":""Output1_2"",
@@ -22,20 +22,20 @@ namespace LoctostacheTests
 		""Var2_3"":""Output2_3""
 	}
 }";
-            var testJsonQuery = new string[1] { "TestObj1" };
-            var validDict = new Dictionary<string, string>() {
+            string[] testJsonQuery = new string[1] { "TestObj1" };
+            Dictionary<string, string> validDict = new() {
                 { "Var1_1", "Output1_1" },
                 { "Var1_2", "Output1_2" },
                 { "Var1_3", "Output1_3" }
             };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
 
         [Fact]
         public void ValidateJsonQueryWithRoot()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""Var1_1"":""Output1_1"",
 	""Var1_2"":""Output1_2"",
 	""Var1_3"":""Output1_3"",
@@ -50,20 +50,20 @@ namespace LoctostacheTests
 		""Var3_3"":""Output3_3""
 	}
 }";
-            var testJsonQuery = new string[1] { "TestObj3" };
-            var validDict = new Dictionary<string, string>() {
+            string[] testJsonQuery = new string[1] { "TestObj3" };
+            Dictionary<string, string> validDict = new() {
                 { "Var3_1", "Output3_1" },
                 { "Var3_2", "Output3_2" },
                 { "Var3_3", "Output3_3" }
             };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
 
         [Fact]
         public void ValidateJsonRootExtraction()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""Var1_1"":""Output1_1"",
 	""Var1_2"":""Output1_2"",
 	""Var1_3"":""Output1_3"",
@@ -78,19 +78,19 @@ namespace LoctostacheTests
 		""Var3_3"":""Output3_3""
 	}
 }";
-            var validDict = new Dictionary<string, string>() {
+            Dictionary<string, string> validDict = new() {
                 { "Var1_1", "Output1_1" },
                 { "Var1_2", "Output1_2" },
                 { "Var1_3", "Output1_3" },
             };
-            var outputDict = JsonHelper.GetJsonRootDictionary(testVarString);
+            Dictionary<string, string> outputDict = JsonHelper.GetJsonRootDictionary(testVarString);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
 
         [Fact]
         public void ValidateJsonQueryMultiQuery()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""TestObj1"":{
 		""Var1_1"":""Output1_1"",
 		""Var1_2"":""Output1_2"",
@@ -107,8 +107,8 @@ namespace LoctostacheTests
 		""Var3_3"":""Output3_3""
 	}
 }";
-            var testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
-            var validDict = new Dictionary<string, string>() {
+            string[] testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
+            Dictionary<string, string> validDict = new() {
                 { "Var1_1", "Output1_1" },
                 { "Var1_2", "Output1_2" },
                 { "Var1_3", "Output1_3" },
@@ -116,14 +116,14 @@ namespace LoctostacheTests
                 { "Var3_2", "Output3_2" },
                 { "Var3_3", "Output3_3" }
             };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
 
         [Fact]
         public void ValidateJsonQueryMultiQueryUpdate()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""TestObj1"":{
 		""Var1_1"":""Output1_1"",
 		""Var1_2"":""Output1_2"",
@@ -135,22 +135,22 @@ namespace LoctostacheTests
 		""Var3_3"":""Output3_3""
 	}
 }";
-            var testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
-            var validDict = new Dictionary<string, string>() {
+            string[] testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
+            Dictionary<string, string> validDict = new() {
                 { "Var1_1", "Output3_1" },
                 { "Var1_2", "Output1_2" },
                 { "Var1_3", "Output1_3" },
                 { "Var3_2", "Output3_2" },
                 { "Var3_3", "Output3_3" }
             };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
 
         [Fact]
         public void ValidateJsonQueryMultiQueryUpdateValue()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""TestObj1"":{
 		""Var1_1"":""Output1_1"",
 	},
@@ -158,15 +158,15 @@ namespace LoctostacheTests
 		""Var1_1"":""Output3_1"",
 	}
 }";
-            var testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            string[] testJsonQuery = new string[2] { "TestObj1", "TestObj3" };
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal("Output3_1", outputDict["Var1_1"]);
         }
 
         [Fact]
         public void ValidateJsonDeepQuery()
         {
-            var testVarString = @"{
+            string testVarString = @"{
 	""TestObj1"":{
         ""TestInnerObj1"":{
 		    ""Var1_1_1"":""Output1_1_1"",
@@ -197,8 +197,8 @@ namespace LoctostacheTests
 		""Var3_3"":""Output3_3""
 	}
 }";
-            var testJsonQuery = new string[3] { "TestObj1.TestInnerObj1", "TestObj2[1]", "TestObj3" };
-            var validDict = new Dictionary<string, string>() {
+            string[] testJsonQuery = new string[3] { "TestObj1.TestInnerObj1", "TestObj2[1]", "TestObj3" };
+            Dictionary<string, string> validDict = new() {
                 { "Var1_1_1", "Output1_1_1" },
                 { "Var1_1_2", "Output1_1_2" },
                 { "Var1_1_3", "Output1_1_3" },
@@ -209,7 +209,7 @@ namespace LoctostacheTests
                 { "Var3_2", "Output3_2" },
                 { "Var3_3", "Output3_3" }
             };
-            var outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
+            Dictionary<string, string> outputDict = JsonHelper.QueriesObjectToDict(testVarString, testJsonQuery);
             Assert.Equal(validDict, outputDict, new DictionaryComparer());
         }
     }
