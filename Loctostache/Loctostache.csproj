@@ -14,9 +14,11 @@
     <AssemblyVersion Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</AssemblyVersion>
     <Version Condition=" '$(VersionSuffix)' == '' ">0.0.1.0</Version>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionSuffix)</Version>
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+    <AssemblyName>$(MSBuildProjectName.toLower())</AssemblyName>
     <PackageProjectUrl>https://github.com/ChadRoesler/Loctostache</PackageProjectUrl>
     <AnalysisLevel>6.0-recommended</AnalysisLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
