@@ -3,7 +3,7 @@
 using Loctostache.Helpers;
 using LoctostacheTests.CustomComparer;
 
-namespace LoctostacheTests
+namespace Loctostache.Tests
 {
     public class JsonUnitTests
     {

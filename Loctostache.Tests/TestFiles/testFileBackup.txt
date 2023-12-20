@@ -1,0 +1,7 @@
+Here is some quick text to: #{Variable1}
+
+
+A few lines:
+#{Variable2}
+                 #{Variable3} why not just out here.
+And then the end!

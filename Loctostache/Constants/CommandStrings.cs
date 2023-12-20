@@ -19,7 +19,7 @@
         internal const char StopOnFailureOption = 'x';
         internal const string StopOnFailureOptionLong = "stop-on-failure";
         internal const string StopOnFailureOptionHelp = "Stops the entire process when a single file fails";
-        internal const string VerboseOption = "Verbose";
+        internal const string VerboseOption = "verbose";
         internal const string VerboseOptionHelp = "Verbosity when processing files";
         internal const char DictionaryOption = 'd';
         internal const string DictionaryOptionLong = "dictionary";

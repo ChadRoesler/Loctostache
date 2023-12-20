@@ -2,6 +2,8 @@
 
 using CommandLine;
 using Loctostache.Commands;
+using Loctostache.Constants;
+using System.Runtime.CompilerServices;
 
 namespace Loctostache
 {

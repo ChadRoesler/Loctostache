@@ -3,7 +3,7 @@
 using Loctostache.Helpers;
 using System.Text;
 
-namespace LoctostacheTests
+namespace Loctostache.Tests
 {
     public class EncodingUnitTests
     {
